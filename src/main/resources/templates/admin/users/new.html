@@ -37,7 +37,7 @@
 					<!--Вкладка админа-->
 					<a class="nav-link active" aria-controls="v-pills-home" aria-selected="true">Admin</a>
 					<!--Вкладка пользователя-->
-					<a class="nav-item nav-link" href="/user">User</a>
+					<a class="nav-item nav-link" href="/user/info">User</a>
 				</div>
 			</div>
 			<!--Основной контент-->
@@ -68,7 +68,7 @@
 								<div class="col-md bg-white">
 									<form class="offset-md-4 col-md-4 mt-4 mb-4"
 									      th:align="center"
-									      th:action="@{/admin/new}"
+									      th:action="@{/admin/users/new}"
 									      th:object="${user}"
 									      th:method="POST">
 										<label for="name"><b>Name</b></label>
@@ -89,7 +89,7 @@
 										<label for="email"><b>Email</b></label>
 										<input class="form-control" id="email"
 										       th:name="email" th:field="*{username}"
-										       th:type="text" required/>
+										       th:type="email" required/>
 										<div th:if="${error}" class="alert alert-danger" th:text="Email is wrong or busy!"></div>
 										<br>
 										<label for="password"><b>Password</b></label>

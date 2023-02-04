@@ -27,6 +27,7 @@ public class WebSecurityConfig {
 					.anyRequest().authenticated()
 					.and()
 				.formLogin().loginPage("/login")
+					.loginProcessingUrl("/process_login")
 					.successHandler(successUserHandler)
 					.permitAll();
 		return http.build();
