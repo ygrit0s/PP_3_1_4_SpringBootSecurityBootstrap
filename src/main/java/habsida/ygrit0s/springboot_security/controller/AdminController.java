@@ -3,6 +3,7 @@ package habsida.ygrit0s.springboot_security.controller;
 import habsida.ygrit0s.springboot_security.entity.User;
 import habsida.ygrit0s.springboot_security.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,39 +26,45 @@ public class AdminController {
 	}
 
 	@GetMapping("/admin")
-	public String pageForAdmins(@ModelAttribute("user") User user,Model model, Principal principal) {
-		Long id = userService.getByUsername(principal.getName()).getId();
-		model.addAttribute("admin", userService.getUser(id));
+	public String pageForAdmins(@AuthenticationPrincipal User user, Model model) {
+		model.addAttribute("user", user);
 		model.addAttribute("userList", userService.userList());
 		model.addAttribute("roleList", roleService.roleList());
-		return "admin";
+		return "admin/users";
 	}
 
-	@PostMapping("/admin/users/new")
+	@GetMapping("/admin/new")
+	public String add(Model model) {
+		model.addAttribute("user", new User());
+		model.addAttribute("roleList", roleService.roleList());
+		return "admin/new";
+	}
+
+	@PostMapping("/admin/new")
 	public String addUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model) {
 		model.addAttribute("roleList", roleService.roleList());
 		if (bindingResult.hasErrors()) {
-			return "admin";
+			return "admin/new";
 		}
 		if (!userService.addUser(user)) {
 			bindingResult.addError(new ObjectError("", ""));
-			return "admin";
+			return "admin/new";
 		}
 		return "redirect:/admin";
 	}
 	
-	@GetMapping("/admin/users/edit/{id}")
+	@GetMapping("/admin/edit/{id}")
 	public String update(@PathVariable("id") long id, Model model) {
 		model.addAttribute("user", userService.getUser(id));
 		model.addAttribute("roleList", roleService.roleList());
 		return "redirect:/admin";
 	}
 
-	@PatchMapping("/admin/users/edit/{id}")
+	@PutMapping("/admin/edit/{id}")
 	public String updateUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model) {
 		model.addAttribute("roleList", roleService.roleList());
 		if (bindingResult.hasErrors()) {
-			return "redirect:/admin/users/edit/{id}";
+			return "redirect:/admin/edit/{id}";
 		} else {
 			userService.updateUser(user);
 			return "redirect:/admin";
@@ -65,7 +72,7 @@ public class AdminController {
 	}
 
 
-	@DeleteMapping("/admin/users/delete/{id}")
+	@DeleteMapping("/admin/delete/{id}")
 	public String removeUser(@PathVariable("id") long id, Principal principal) {
 		userService.removeUser(id, principal);
 		return "redirect:/admin";

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<title>User Page</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+	      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta charset="UTF-8">
+</head>
+<body>
+<!--Навигационная шапка сверху-->
+<header>
+	<nav class="navbar navbar-dark bg-dark">
+		<div class="container-fluid">
+			<!--Юзер с ролью-->
+			<p class="navbar-brand text-white">
+				<b><span class="align-middle" th:text="${user.username}"></span></b>
+				<span class="align-middle">with roles:</span>
+				<span class="align-middle" th:text="${user.roles}"></span>
+			</p>
+			<!--Кнопка logout справа-->
+			<form th:action="@{/logout}" method="POST">
+				<button type="submit" class="btn btn-dark text-right">Logout</button>
+			</form>
+		</div>
+	</nav>
+</header>
+<!--Панель сбоку и таблица-->
+<section>
+	<div class="container-fluid">
+		<div class="row">
+			<!--Панель сбоку-->
+			<div class="p-0 col-2">
+				<div class="nav flex-column nav-pills pt-4" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+					<!--Вкладка админа-->
+					<a class="nav-link" href="/admin" sec:authorize="hasAuthority('ROLE_ADMIN')" role="tab"
+					   aria-controls="v-pills-home" aria-selected="true">Admin</a>
+					<!--Вкладка пользователя-->
+					<a class="nav-link active" href="/user" sec:authorize="(hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER'))" role="tab"
+					   aria-controls="v-pills-profile" aria-selected="false">User</a>
+				</div>
+			</div>
+			<!--Основной контент-->
+			<div class="col-10 px-0">
+				<div class="tabs p-4">
+					<!--Страница юзера-->
+					<h2 class="m-3 fw-bold">User information page</h2>
+					<div class="pt-2 tab-content">
+						<div class="tab-pane fade show active" id="description">
+							<div class="p-3 border">
+								<h5 class="my-0 mx-2">USER INFO</h5>
+							</div>
+							<!--Таблица юзера-->
+							<div class="p-3 bg-white border border-top-0">
+								<table class="usersTable table table-striped bg-white">
+									<thead>
+									<tr>
+										<th scope="col">ID</th>
+										<th scope="col">First Name</th>
+										<th scope="col">Last Name</th>
+										<th scope="col">Age</th>
+										<th scope="col">Email</th>
+										<th scope="col">Role</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr>
+										<td th:text="${user.id}"></td>
+										<td th:text="${user.name}"></td>
+										<td th:text="${user.surname}"></td>
+										<td th:text="${user.age}"></td>
+										<td th:text="${user.username}"></td>
+										<td th:text="${user.roles}">
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
+</body>
+</html>

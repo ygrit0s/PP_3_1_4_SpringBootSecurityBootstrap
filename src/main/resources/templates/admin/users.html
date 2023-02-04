@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<title>Admin Page</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+	      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta charset="UTF-8">
+</head>
+<body>
+<!--Навигационная шапка сверху-->
+<header>
+	<nav class="navbar navbar-dark bg-dark">
+		<div class="container-fluid">
+			<!--Юзер с ролью-->
+			<p class="navbar-brand text-white">
+				<b><span class="align-middle" th:text="${user.username}"></span></b>
+				<span class="align-middle">with roles:</span>
+				<span class="align-middle" th:text="${user.roles}"></span>
+			</p>
+			<!--Кнопка logout справа-->
+			<form th:action="@{/logout}" method="POST">
+				<button type="submit" class="btn btn-dark text-right">Logout</button>
+			</form>
+		</div>
+	</nav>
+</header>
+<!--Панель сбоку и таблица-->
+<section>
+	<div class="container-fluid">
+		<div class="row">
+			<!--Панель сбоку-->
+			<div class="p-0 col-2">
+				<div class="nav flex-column nav-pills pt-4" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+					<!--Вкладка админа-->
+					<a class="nav-link active" href="/admin" sec:authorize="hasAuthority('ROLE_ADMIN')" role="tab"
+					   aria-controls="v-pills-home" aria-selected="true">Admin</a>
+					<!--Вкладка пользователя-->
+					<a class="nav-link" href="/user" sec:authorize="(hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER'))"
+					   role="tab"
+					   aria-controls="v-pills-profile" aria-selected="false">User</a>
+				</div>
+			</div>
+			<!--Основной контент-->
+			<div class="col-10 px-0">
+				<div class="container-fluid">
+					<!--Страница админа-->
+					<h2 class="m-3 fw-bold">Admin panel</h2>
+					<div class="tab-content" id="tabContent">
+						<ul class="nav nav-tabs">
+							<!--Вкладка с таблицей юзеров-->
+							<li class="nav-item">
+								<a class="nav-link active" data-toggle="tab">ALL USERS</a>
+							</li>
+							<!--Вкладка нового юзера-->
+							<li class="nav-item">
+								<a class="nav-link" data-toggle="tab" th:href="@{/admin/new}">NEW USER</a>
+							</li>
+						</ul>
+						<!--Содержимое 1-ой вкладки-->
+						<div class="card">
+							<div class="card-header fw-bold">
+								<div class="m-1">
+									<h3>Users tables</h3>
+								</div>
+							</div>
+							<!--Таблица юзеров-->
+							<div class="card-body">
+								<table class="table table-striped table-hover">
+									<thead>
+									<tr>
+										<th scope="col">ID</th>
+										<th scope="col">First Name</th>
+										<th scope="col">Last Name</th>
+										<th scope="col">Age</th>
+										<th scope="col">Email</th>
+										<th scope="col">Role</th>
+										<th colspan="2" scope="col">Action</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr th:each="user : ${userList}">
+										<td th:text="${user.id}">id</td>
+										<td th:text="${user.name}">name</td>
+										<td th:text="${user.surname}">surname</td>
+										<td th:text="${user.age}">age</td>
+										<td th:text="${user.username}">email</td>
+										<td th:text="${user.roles}">roles</td>
+										<td>
+											<a type="button" class="btn btn-sm btn-info text-light"
+											   data-bs-toggle="modal"
+											   data-bs-target="#editModal"
+											   th:data-bs-target="${'#editModal'+ user.id}">Edit</a>
+										</td>
+										<td>
+											<a type="button" class="btn btn-sm btn-danger"
+											   data-bs-toggle="modal"
+											   data-bs-target="#DELETE"
+											   th:data-bs-target="${'#deleteModal'+ user.id}">Delete</a>
+										</td>
+										<!-- Modal Edit -->
+										<div class="modal fade" th:id="${'editModal' + user.id}"
+										     aria-labelledby="exampleModalLabel" aria-hidden="true">
+											<div class="modal-dialog">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="editModalLabel">Edit user</h5>
+														<button type="button" class="btn-close" data-bs-dismiss="modal"
+														        aria-label="Close"></button>
+													</div>
+													<form th:action="@{/admin/edit/{id}(id=${user.id})}"
+													      th:method="PUT" th:object="${user}">
+														<div class="modal-body col-md text-center">
+															<div class="container-fluid col-6">
+																<label for="idEdit"><b>Name</b></label>
+																<input th:name="id" th:type="text"
+																       class="form-control" id="idEdit"
+																       th:value="*{id}" disabled/>
+																<br>
+																<label for="name0"><b>Name</b></label>
+																<input th:name="name" th:type="text"
+																       class="form-control" id="name0"
+																       th:value="*{name}"/>
+																<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
+																<br>
+																<label for="surnameEdit"><b>Surname</b></label>
+																<input th:name="surname" th:type="text"
+																       class="form-control" id="surnameEdit"
+																       th:value="*{surname}"/>
+																<div th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Surname error</div>
+																<br>
+																<label for="ageEdit"><b>Age</b></label>
+																<input th:name="age" th:type="number" min="0" max="127"
+																       class="form-control" id="ageEdit"
+																       th:value="*{age}"/>
+																<div th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age error</div>
+																<br>
+																<label for="emailEdit"><b>Email</b></label>
+																<input th:disabled name="email" th:type="text"
+																       class="form-control" id="emailEdit"
+																       th:value="*{username}"/>
+																<br>
+																<label for="passwordEdit"><b>Password</b></label>
+																<input th:name="password" type="password"
+																       class="form-control" id="passwordEdit"
+																       th:value="*{password}"/>
+																<div th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error
+																</div>
+																<br>
+																<label for="rolesEdit"><b>Role</b></label>
+																<select multiple class="form-control form-control-sm" id="rolesEdit" name="roles"
+																        size="2"
+																        required>
+																	<option th:each="role: ${roleList}"
+																	        th:value="${role.id}"
+																	        th:field="*{roles}"
+																	        th:selected="${user.roles.contains(role)}">
+																		<th:block th:text="${role}">
+																		</th:block>
+																	</option>
+																</select>
+																<br>
+															</div>
+														</div>
+														<div class="modal-footer">
+															<button type="submit" class="btn btn-primary">
+																Edit
+															</button>
+															<button type="button" class="btn btn-secondary"
+															        data-bs-dismiss="modal">Close
+															</button>
+														</div>
+													</form>
+												</div>
+											</div>
+										</div>
+										<!-- Modal Delete -->
+										<div class="modal fade" th:id="${'deleteModal'+user.id}"
+										     aria-labelledby="exampleModalLabel" aria-hidden="true">
+											<div class="modal-dialog" role="document">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="exampleModalLabel">Delete
+															user</h5>
+														<button type="button" class="btn-close"
+														        data-bs-dismiss="modal"
+														        aria-label="Close"></button>
+													</div>
+													<form class="modal-body col-md text-center"
+													      th:action="@{/admin/delete/{id}(id=${user.id})}"
+													      th:method="DELETE" th:object="${user}">
+														<div class="modal-body col-md">
+															<div class="container-fluid col-6">
+																<label for="idDel"><b>ID</b></label>
+																<input th:name="id" th:type="text" class="form-control"
+																       id="idDel" th:value="${user.id}" disabled/>
+																<br>
+																<label for="nameDel"><b>Name</b></label>
+																<input th:name="name" th:type="text"
+																       class="form-control"
+																       id="nameDel" th:value="*{name}" disabled/>
+																<br>
+																<label for="surnameDel"><b>Surname</b></label>
+																<input th:name="surname" th:type="text"
+																       class="form-control" id="surnameDel"
+																       th:value="*{surname}" disabled/>
+																<br>
+																<label for="ageDel"><b>Age</b></label>
+																<input th:name="age" th:type="number"
+																       class="form-control"
+																       id="ageDel" th:value="*{age}" disabled/>
+																<br>
+																<label for="emailDel"><b>Email</b></label>
+																<input th:name="email" th:type="text"
+																       class="form-control"
+																       id="emailDel" th:value="${user.username}" disabled/>
+																<br>
+																<label for="rolesDel"><b>Role</b></label>
+																<select multiple class="form-control form-control-sm" id="rolesDel" name="roles"
+																        size="2" disabled>
+																	<option th:each="role: ${roleList}"
+																	        th:value="${role}"
+																	        th:selected="${user.roles.contains(role)}">
+																		<th:block th:text="${role}">
+																		</th:block>
+																	</option>
+																</select>
+																<br>
+															</div>
+														</div>
+														<div class="modal-footer">
+															<button type="button" class="btn btn-secondary"
+															        data-bs-dismiss="modal">Close
+															</button>
+															<button type="submit" class="btn btn-danger">Delete
+															</button>
+														</div>
+													</form>
+												</div>
+											</div>
+										</div>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
+</body>
+</html>
