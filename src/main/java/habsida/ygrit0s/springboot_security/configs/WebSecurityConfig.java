@@ -26,7 +26,7 @@ public class WebSecurityConfig {
 					.requestMatchers("/user/**").hasAnyRole("ADMIN", "USER")
 					.anyRequest().authenticated()
 					.and()
-				.formLogin()
+				.formLogin().loginPage("/login")
 					.successHandler(successUserHandler)
 					.permitAll();
 		return http.build();
