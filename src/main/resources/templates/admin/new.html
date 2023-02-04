@@ -72,43 +72,43 @@
 									      th:object="${user}"
 									      th:method="POST">
 										<label for="name"><b>Name</b></label>
-										<input th:name="name" th:field="*{name}" th:type="text"
-										       class="form-control" id="name" required/>
-										<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
+										<input class="form-control" id="name"
+										       th:name="name" th:field="*{name}"
+										       th:type="text" maxlength="31" required/>
 										<br>
 										<label for="surname"><b>Surname</b></label>
-										<input th:name="surname" th:field="*{surname}" th:type="text"
-										       class="form-control" id="surname"/>
-										<div th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Surname error</div>
+										<input class="form-control" id="surname"
+										       th:name="surname" th:field="*{surname}"
+										       th:type="text" maxlength="31"/>
 										<br>
 										<label for="age"><b>Age</b></label>
-										<input th:name="age" th:field="*{age}" th:type="number" min="0" max="127"
-										       class="form-control" id="age"/>
-										<div th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age error</div>
+										<input class="form-control" id="age"
+										       th:name="age" th:field="*{age}"
+										       th:type="number" min="0" max="127"/>
 										<br>
 										<label for="email"><b>Email</b></label>
-										<input th:name="email" th:field="*{username}" th:type="text"
-										       class="form-control" id="email" required/>
-										<div th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</div>
-										<div th:if="${#fields.hasGlobalErrors()}">Username is busy!</div>
+										<input class="form-control" id="email"
+										       th:name="email" th:field="*{username}"
+										       th:type="text" required/>
 										<br>
 										<label for="password"><b>Password</b></label>
-										<input th:name="password" th:field="*{password}" th:type="password"
-										       class="form-control" id="password"/>
-										<div th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>
-											<br>
-											<label for="roles"><b>Role</b></label>
-											<select multiple class="form-control form-control-sm" id="roles" name="roles" size="2" required>
-												<option th:each="role: ${roleList}"
-												        th:value="${role.id}"
-												        th:field="*{roles}">
-													<th:block th:text="${role}">
-													</th:block>
-												</option>
-											</select>
-											<br>
-											<button th:type="submit" class="btn btn-success btn-lg" value="Add new user">Add new user
-											</button>
+										<input class="form-control" id="password"
+										       th:name="password" th:field="*{password}"
+										       th:type="password" minlength="4" required/>
+										<br>
+										<label for="roles"><b>Role</b></label>
+										<select multiple class="form-control form-control-sm" id="roles"
+										        name="roles" size="2" required>
+											<option th:each="role: ${roleList}"
+											        th:value="${role.id}"
+											        th:field="*{roles}">
+												<th:block th:text="${role}">
+												</th:block>
+											</option>
+										</select>
+										<br>
+										<button th:type="submit" class="btn btn-success btn-lg" value="Add new user">Add new user
+										</button>
 									</form>
 								</div>
 							</div>

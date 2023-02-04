@@ -15,24 +15,22 @@ public class User implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotEmpty(message = "The field cannot be empty")
-	@Size(min = 2, max = 31, message = "Name should be between 2 and 31 characters")
+	@NotEmpty
+	@Size(max = 31)
 	private String name;
 
-	@Size(min = 2, max = 31, message = "Surname should be between 2 and 31 characters")
+	@Size(max = 31)
 	private String surname;
 
-	@Min(value = 0, message = "Age should be >= 0")
-	@Max(value = 127, message = "Age should be < 128")
+	@Min(value = 0)	@Max(value = 127)
 	private Byte age;
 
 	@Email
-	@Column(name = "email", unique = true)
-	@NotEmpty(message = "User email cannot be empty")
+	@Column(name = "email", unique = true, nullable = false)
 	private String username;
 
-	@NotEmpty(message = "The field cannot be empty")
-	@Size(min = 4, message = "Password should be greater then 4 symbols")
+	@NotEmpty
+	@Size(min = 4)
 	private String password;
 
 	@ManyToMany(fetch = FetchType.EAGER)

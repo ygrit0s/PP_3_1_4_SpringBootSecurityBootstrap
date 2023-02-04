@@ -6,11 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import jakarta.validation.Valid;
 import java.security.Principal;
 
 @Controller
@@ -41,34 +39,26 @@ public class AdminController {
 	}
 
 	@PostMapping("/admin/new")
-	public String addUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model) {
-		model.addAttribute("roleList", roleService.roleList());
-		if (bindingResult.hasErrors()) {
-			return "admin/new";
-		}
+	public String addUser(@ModelAttribute("user") User user, RedirectAttributes ra, Model model) {
 		if (!userService.addUser(user)) {
-			bindingResult.addError(new ObjectError("", ""));
+			ra.addFlashAttribute("error", "Email is wrong or busy!");
+			model.addAttribute("roleList", roleService.roleList());
 			return "admin/new";
 		}
 		return "redirect:/admin";
 	}
 	
-	@GetMapping("/admin/edit/{id}")
-	public String update(@PathVariable("id") long id, Model model) {
-		model.addAttribute("user", userService.getUser(id));
-		model.addAttribute("roleList", roleService.roleList());
-		return "redirect:/admin";
-	}
+//	@GetMapping("/admin/edit/{id}")
+//	public String update(@PathVariable("id") long id, Model model) {
+//		model.addAttribute("user", userService.getUser(id));
+//		model.addAttribute("roleList", roleService.roleList());
+//		return "redirect:/admin";
+//	}
 
 	@PutMapping("/admin/edit/{id}")
-	public String updateUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model) {
-		model.addAttribute("roleList", roleService.roleList());
-		if (bindingResult.hasErrors()) {
-			return "redirect:/admin/edit/{id}";
-		} else {
-			userService.updateUser(user);
-			return "redirect:/admin";
-		}
+	public String updateUser(@ModelAttribute("user") User user) {
+		userService.updateUser(user);
+		return "redirect:/admin";
 	}
 
 
