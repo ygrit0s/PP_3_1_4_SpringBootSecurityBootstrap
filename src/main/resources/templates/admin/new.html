@@ -90,6 +90,7 @@
 										<input class="form-control" id="email"
 										       th:name="email" th:field="*{username}"
 										       th:type="text" required/>
+										<div th:if="${error}" class="alert alert-danger" th:text="Email is wrong or busy!"></div>
 										<br>
 										<label for="password"><b>Password</b></label>
 										<input class="form-control" id="password"

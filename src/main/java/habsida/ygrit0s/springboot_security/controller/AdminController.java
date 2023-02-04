@@ -41,19 +41,13 @@ public class AdminController {
 	@PostMapping("/admin/new")
 	public String addUser(@ModelAttribute("user") User user, RedirectAttributes ra, Model model) {
 		if (!userService.addUser(user)) {
-			ra.addFlashAttribute("error", "Email is wrong or busy!");
+			ra.addFlashAttribute("error", "");
 			model.addAttribute("roleList", roleService.roleList());
 			return "admin/new";
 		}
 		return "redirect:/admin";
 	}
 	
-//	@GetMapping("/admin/edit/{id}")
-//	public String update(@PathVariable("id") long id, Model model) {
-//		model.addAttribute("user", userService.getUser(id));
-//		model.addAttribute("roleList", roleService.roleList());
-//		return "redirect:/admin";
-//	}
 
 	@PutMapping("/admin/edit/{id}")
 	public String updateUser(@ModelAttribute("user") User user) {
