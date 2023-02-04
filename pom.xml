@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>habsida.ygrit0s</groupId>
-	<artifactId>PP_3_1_4_SpringBootSecurityBootstrap</artifactId>
+	<artifactId>PP_3_1_4_SecurityBootstrap</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>SpringBootSecurity</name>
+	<name>SecurityBootstrap</name>
 	<description>SpringBootSecurity project with Bootstrap</description>
 	<properties>
 		<java.version>19</java.version>
