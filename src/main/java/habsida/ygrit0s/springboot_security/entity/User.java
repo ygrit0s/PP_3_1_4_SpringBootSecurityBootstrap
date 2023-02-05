@@ -26,7 +26,8 @@ public class User implements UserDetails {
 	private Byte age;
 
 	@Email
-	@Column(name = "email", unique = true, nullable = false)
+	@NotEmpty
+	@Column(name = "email", unique = true)
 	private String username;
 
 	@NotEmpty

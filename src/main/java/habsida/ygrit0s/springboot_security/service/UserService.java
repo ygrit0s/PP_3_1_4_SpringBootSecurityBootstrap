@@ -30,29 +30,26 @@ public class UserService implements UserDetailsService {
 		return userRepository.findAll();
 	}
 
-	public User getUser(Long id) {
-		var user = userRepository.findById(id);
-		if (user.isEmpty()) {
-			throw new UsernameNotFoundException(String.format("User with id %s not found", id));
-		} else {
-			return user.get();
-		}
-	}
+//	public User getUser(Long id) {
+//		var user = userRepository.findById(id);
+//		if (user.isEmpty()) {
+//			throw new UsernameNotFoundException(String.format("User with id %s not found", id));
+//		} else {
+//			return user.get();
+//		}
+//	}
 	
-	public boolean addUser(User user) {
+	public boolean updateUser(User user) {
 		if (getByUsername(user.getUsername()) != null) {
 			return false;
 		}
-		updateUser(user);
-		return true;
-	}
-
-	public void updateUser(User user) {
 		user.getRoles().add(new Role(1L, "ROLE_USER"));
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
+		return true;
 	}
-	
+
+
 	public boolean removeUser(Long id, Principal principal) {
 		if (id.equals(getByUsername(principal.getName()).getId())) {
 			return false;
@@ -64,6 +61,7 @@ public class UserService implements UserDetailsService {
 	public User getByUsername(String username) {
 		return userRepository.findByUsername(username);
 	}
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = getByUsername(username);
