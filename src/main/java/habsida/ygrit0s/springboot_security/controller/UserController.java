@@ -7,9 +7,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/user/info")
 public class UserController {
 	
-	@GetMapping("/user/info")
+	@GetMapping()
 	public String userPage(@AuthenticationPrincipal User user, Model model) {
 		model.addAttribute("user", user);
 		return "user/info";
