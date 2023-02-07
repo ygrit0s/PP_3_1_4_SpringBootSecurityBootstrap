@@ -23,8 +23,8 @@ public class AdminController {
 	}
 
 	@GetMapping()
-	public String pageForAdmins(@AuthenticationPrincipal User admin,
-	                            @ModelAttribute("user") User user, Model model) {
+	public String pageForAdmins(@AuthenticationPrincipal User admin, Model model) {
+		model.addAttribute("user", new User());
 		model.addAttribute("admin", admin);
 		model.addAttribute("userList", userService.userList());
 		model.addAttribute("roleList", roleService.roleList());
