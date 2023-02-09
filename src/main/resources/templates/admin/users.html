@@ -98,14 +98,14 @@
 												<td>
 													<a type="button" class="btn btn-sm btn-info text-light"
 													   data-bs-toggle="modal"
-													   th:data-bs-target="${'#editModal'+ user.id}">Edit</a>
+													   th:data-bs-target="${'#modalEdit'+ user.id}">Edit</a>
 													<!-- Modal Edit -->
-													<div class="modal fade" th:id="${'editModal' + user.id}"
+													<div class="modal fade" th:id="${'modalEdit' + user.id}"
 													     aria-labelledby="exampleModalLabel" aria-hidden="true">
 														<div class="modal-dialog">
 															<div class="modal-content">
 																<div class="modal-header">
-																	<h5 class="modal-title" id="editModalLabel">Edit user</h5>
+																	<h5 class="modal-title" id="modal-edit-label">Edit user</h5>
 																	<button type="button" class="btn-close" data-bs-dismiss="modal"
 																	        aria-label="Close"></button>
 																</div>
@@ -133,9 +133,9 @@
 																		       th:name="age" th:type="number"
 																		       th:value="*{age}" min="0" max="127"/>
 																		<br>
-																		<label for="emailEdit"><b>Email</b></label>
-																		<input class="form-control" id="emailEdit"
-																		       th:name="email" th:type="email"
+																		<label for="usernameEdit"><b>Email</b></label>
+																		<input class="form-control" id="usernameEdit"
+																		       th:name="username" th:type="email"
 																		       th:field="*{username}" required/>
 																		<br>
 																		<label for="passwordEdit"><b>Password</b></label>
@@ -144,8 +144,8 @@
 																		       th:field="*{password}" minlength="4" required/>
 																		<br>
 																		<label for="rolesEdit"><b>Role</b></label>
-																		<select multiple class="form-control form-control-sm" id="rolesEdit"
-																		        name="roles" size="2" required>
+																		<select multiple class="form-control form-control-sm"
+																		        id="rolesEdit" size="2" required>
 																			<option th:each="role: ${roleList}"
 																			        th:value="${role.id}"
 																			        th:field="*{roles}"
@@ -172,14 +172,14 @@
 												<td>
 													<a type="button" class="btn btn-sm btn-danger"
 													   data-bs-toggle="modal"
-													   th:data-bs-target="${'#deleteModal'+ user.id}">Delete</a>
+													   th:data-bs-target="${'#modalDelete'+ user.id}">Delete</a>
 													<!-- Modal Delete -->
-													<div class="modal fade" th:id="${'deleteModal' + user.id}"
+													<div class="modal fade" th:id="${'modalDelete' + user.id}"
 													     aria-labelledby="exampleModalLabel" aria-hidden="true">
 														<div class="modal-dialog" role="document">
 															<div class="modal-content">
 																<div class="modal-header">
-																	<h5 class="modal-title" id="exampleModalLabel">Delete
+																	<h5 class="modal-title" id="modal-delete-label">Delete
 																		user</h5>
 																	<button type="button" class="btn-close"
 																	        data-bs-dismiss="modal"
@@ -209,14 +209,14 @@
 																		       th:name="age" th:type="number"
 																		       th:value="*{age}" disabled/>
 																		<br>
-																		<label for="emailDel"><b>Email</b></label>
-																		<input class="form-control" id="emailDel"
-																		       th:name="text" th:type="email"
+																		<label for="usernameDel"><b>Email</b></label>
+																		<input class="form-control" id="usernameDel"
+																		       th:name="username" th:type="email"
 																		       th:value="*{username}" disabled/>
 																		<br>
 																		<label for="rolesDel"><b>Role</b></label>
-																		<select multiple class="form-control form-control-sm" id="rolesDel" name="roles"
-																		        size="2" disabled>
+																		<select multiple class="form-control form-control-sm"
+																		        id="rolesDel" size="2" disabled>
 																			<option th:each="role: ${roleList}"
 																			        th:value="${role}"
 																			        th:selected="${user.roles.contains(role)}">
@@ -260,39 +260,39 @@
 											      th:action="@{/admin/users}"
 											      th:object="${user}"
 											      th:method="PUT">
-												<label for="name"><b>First name</b></label>
-												<input class="form-control" id="name"
+												<label for="nameAdd"><b>First name</b></label>
+												<input class="form-control" id="nameAdd"
 												       th:name="name" th:field="*{name}"
 												       th:type="text" maxlength="31"
 												       placeholder="First name" required/>
 												<br>
-												<label for="surname"><b>Last name</b></label>
-												<input class="form-control" id="surname"
+												<label for="surnameAdd"><b>Last name</b></label>
+												<input class="form-control" id="surnameAdd"
 												       th:name="surname" th:field="*{surname}"
 												       th:type="text" maxlength="31"
 												       placeholder="Last name"/>
 												<br>
-												<label for="age"><b>Age</b></label>
-												<input class="form-control" id="age"
+												<label for="ageAdd"><b>Age</b></label>
+												<input class="form-control" id="ageAdd"
 												       th:name="age" th:field="*{age}"
 												       th:type="number" min="0" max="127"
 												       placeholder="Age"/>
 												<br>
-												<label for="email"><b>Email</b></label>
-												<input class="form-control" id="email"
-												       th:name="email" th:field="*{username}"
+												<label for="usernameAdd"><b>Email</b></label>
+												<input class="form-control" id="usernameAdd"
+												       th:name="username" th:field="*{username}"
 												       th:type="email"
 												       placeholder="Email" required/>
 												<br>
-												<label for="password"><b>Password</b></label>
-												<input class="form-control" id="password"
+												<label for="passwordAdd"><b>Password</b></label>
+												<input class="form-control" id="passwordAdd"
 												       th:name="password" th:field="*{password}"
 												       th:type="password" minlength="4"
 												       placeholder="Password" required/>
 												<br>
-												<label for="roles"><b>Role</b></label>
-												<select multiple class="form-control form-control-sm" id="roles"
-												        name="roles" size="2" required>
+												<label for="rolesAdd"><b>Role</b></label>
+												<select multiple class="form-control form-control-sm"
+												        id="rolesAdd" size="2" required>
 													<option th:each="role: ${roleList}"
 													        th:value="${role.id}"
 													        th:field="*{roles}">
