@@ -40,7 +40,7 @@ public class UserService implements UserDetailsService {
 //	}
 	
 	public boolean updateUser(User user) {
-		if (getByUsername(user.getUsername()) != null) {
+		if ((user.getId() == null) & (getByUsername(user.getUsername()) != null)) {
 			return false;
 		}
 		user.getRoles().add(new Role(1L, "ROLE_USER"));
